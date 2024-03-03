@@ -50,4 +50,20 @@ public class AccountServiceImpl implements AccountService {
   public List<Account> getAccounts() {
     return accountRepository.findAll();
   }
+    @Override
+  public Account updateAccount(Account details) {
+    var options =
+        WorkflowOptions.newBuilder()
+            .setTaskQueue(CreateAccountWorkflow.QUEUE_NAME)
+            .setWorkflowId(details.getEmail())
+            .build();
+
+    logger.info(
+        "initiating workflow to update account for account id: {}", details.getProviderId());
+
+    var workflow = workflowClient.newWorkflowStub(UpdateAccountWorkflow.class, options);
+
+    return workflow.updateAccount(details);
+  }
+
 }
