@@ -57,7 +57,8 @@ public class AccountController implements AccountsApi {
     return new ResponseEntity<>(accountsDto, HttpStatus.OK);
   }
   @Override
-  public ResponseEntity<AccountDto> updateUserAccount(UpdateAccountDto updateAccountDto) {
+  @patch("/acccounts/{id}")
+  public ResponseEntity<AccountDto> updateUserAccount(UpdateAccountDto updateAccountDto,@pathvariable Long id) {
     logger.info("Updating account for user with account id: {}", updateAccountDto.getProviderId());
 
     var account =
